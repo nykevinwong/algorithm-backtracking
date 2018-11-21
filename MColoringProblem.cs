@@ -46,7 +46,7 @@ public class MColoringProblem
                     return true;
             }
 
-            ColorOnVertex[targetVertex] = 0;/// back no color fill
+            ColorOnVertex[targetVertex] = 0;/// backtracking. back to no color fill
         }
 
         return false;
