@@ -11,7 +11,22 @@ public class Sudoku
         for(int i=0;i<9;i++)
             if(matrix[i,x]==value) return false;
 
+        if(!isValidInBox(matrix, x,y, value))
+        return false;
+
         return true;
+    }
+
+    // make sure the assign value doesn't appear int the target box
+    static bool isValidInBox(int[,] matrix, int x, int y, int value)
+    {
+        int c = (x / 3) * 3;
+        int r = (y / 3) * 3;
+
+        for(int y1=0;y1<3;y1++)
+            for(int x1=0;x1<3;x1++)
+            if(matrix[r+y1,c+x1]==value) return false;
+            return true;
     }
 
     static bool solveSudoku(int[,] matrix, int zeroCount)
@@ -86,7 +101,7 @@ public class Sudoku
                       {0, 5, 0, 0, 9, 0, 6, 0, 0}, 
                       {1, 3, 0, 0, 0, 0, 2, 5, 0}, 
                       {0, 0, 0, 0, 0, 0, 0, 7, 4}, 
-                      {0, 0, 5, 2, 0, 6, 3, 0, 7}}; 
+                      {0, 0, 5, 2, 0, 6, 3, 0, 0}}; 
         
         stopwatch.Start();
         int zeroCount = getCount(matrix,0); // get all zero count. this is to improve performance
