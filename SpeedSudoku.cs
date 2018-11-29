@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 public class SpeedSudoku
 {
@@ -89,6 +90,7 @@ public class SpeedSudoku
 
     static void Main(string[] args)
     {
+        Stopwatch stopwatch = new Stopwatch();
         int[,] matrix = new int[9,9]{
                       {3, 0, 6, 5, 0, 8, 4, 0, 0}, 
                       {5, 2, 0, 0, 0, 0, 0, 0, 0}, 
@@ -99,6 +101,8 @@ public class SpeedSudoku
                       {1, 3, 0, 0, 0, 0, 2, 5, 0}, 
                       {0, 0, 0, 0, 0, 0, 0, 7, 4}, 
                       {0, 0, 5, 2, 0, 6, 3, 0, 7}};  // the last cell is 7, which takes a lot longer to resolve
+
+        stopwatch.Start();
         int zeroCount = getCount(matrix,0); // get all zero count. this is to improve performance
         int[,] zeroCellPositions = getUnsolvedPositions(matrix, zeroCount);
         if(solveSudoku(matrix, zeroCellPositions, 0,  zeroCount))
@@ -109,5 +113,7 @@ public class SpeedSudoku
         {
             Console.WriteLine("No solution is found");
         }
+        stopwatch.Stop();
+        Console.WriteLine("Time elapsed: {0}", stopwatch.Elapsed);
     }
 }
