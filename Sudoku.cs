@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 public class Sudoku
 {
@@ -30,14 +31,14 @@ public class Sudoku
                     {
                         if(isValidValue(matrix,x,y, i))
                         {
-                            Console.WriteLine("Currently solved ({0},{1}) => assign value {2}... ", y,x, i);
+                         //   Console.WriteLine("Currently solved ({0},{1}) => assign value {2}... ", y,x, i);
                             matrix[y,x]=i;
                             zeroCount--;
                             if(solveSudoku(matrix, zeroCount))
                                 return true;
                             matrix[y,x]=0;
                             zeroCount++;
-                            Console.WriteLine("Currently solved ({0},{1}) => no solution with value {2}. backtracking now... ", y,x, i);
+                         //   Console.WriteLine("Currently solved ({0},{1}) => no solution with value {2}. backtracking now... ", y,x, i);
                         }
                     }
 
@@ -75,6 +76,7 @@ public class Sudoku
     }
     static void Main(string[] args)
     {
+        Stopwatch stopwatch = new Stopwatch();
         int[,] matrix = new int[9,9]{
                       {3, 0, 6, 5, 0, 8, 4, 0, 0}, 
                       {5, 2, 0, 0, 0, 0, 0, 0, 0}, 
@@ -84,8 +86,9 @@ public class Sudoku
                       {0, 5, 0, 0, 9, 0, 6, 0, 0}, 
                       {1, 3, 0, 0, 0, 0, 2, 5, 0}, 
                       {0, 0, 0, 0, 0, 0, 0, 7, 4}, 
-                      {0, 0, 5, 2, 0, 6, 3, 0, 0}}; 
+                      {0, 0, 5, 2, 0, 6, 3, 0, 7}}; 
         
+        stopwatch.Start();
         int zeroCount = getCount(matrix,0); // get all zero count. this is to improve performance
         if(solveSudoku(matrix, zeroCount))
         {
@@ -95,5 +98,7 @@ public class Sudoku
         {
             Console.WriteLine("No solution is found");
         }
+        stopwatch.Stop();
+        Console.WriteLine("Time elapsed: {0}", stopwatch.Elapsed);
     }
 }
