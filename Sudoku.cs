@@ -13,13 +13,12 @@ public class Sudoku
         return true;
     }
 
-    static bool solveSudoku(int[,] matrix)
+    static bool solveSudoku(int[,] matrix, int zeroCount)
     {
         int h = matrix.GetLength(0);
         int w = matrix.GetLength(1);
 
-        if(matrix[h-1,w-1]!=0) return true; // if the last element is corretly filled/solved!!
-        
+        if(zeroCount==0) return true; // all cells containing zero are filled.
         
 
         for(int y=0;y < h;y++)
@@ -29,16 +28,19 @@ public class Sudoku
                 {
                     for(int i=1;i<=9;i++)
                     {
-                        if(i==1) Console.WriteLine("Currently solving ({0},{1}) => assign value {2}... ", y,x, i);
                         if(isValidValue(matrix,x,y, i))
                         {
+                            Console.WriteLine("Currently solved ({0},{1}) => assign value {2}... ", y,x, i);
                             matrix[y,x]=i;
-                            if(solveSudoku(matrix))
+                            zeroCount--;
+                            if(solveSudoku(matrix, zeroCount))
                                 return true;
                             matrix[y,x]=0;
+                            zeroCount++;
+                            Console.WriteLine("Currently solved ({0},{1}) => no solution with value {2}. backtracking now... ", y,x, i);
                         }
                     }
-                    
+
                     return false; // try all 1-9 number and it's not working
                 }
             }
@@ -59,6 +61,18 @@ public class Sudoku
         }
     }
 
+    static int getCount(int[,] matrix, int target)
+    {
+        int h = matrix.GetLength(0);
+        int w = matrix.GetLength(1);
+        int count = 0;
+
+        for(int y=0;y < h;y++)
+            for(int x=0;x < w;x++)
+                if(matrix[y,x]==target) count++;
+
+                return count;
+    }
     static void Main(string[] args)
     {
         int[,] matrix = new int[9,9]{
@@ -71,8 +85,9 @@ public class Sudoku
                       {1, 3, 0, 0, 0, 0, 2, 5, 0}, 
                       {0, 0, 0, 0, 0, 0, 0, 7, 4}, 
                       {0, 0, 5, 2, 0, 6, 3, 0, 0}}; 
-
-        if(solveSudoku(matrix))
+        
+        int zeroCount = getCount(matrix,0); // get all zero count. this is to improve performance
+        if(solveSudoku(matrix, zeroCount))
         {
             Print(matrix);
         }
